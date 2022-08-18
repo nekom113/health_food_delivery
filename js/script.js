@@ -35,15 +35,23 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
   // Timer
-  const deadline = '2022-08-19'
+  const deadline = '2022-08-18'
 
 
   function getTimeRemaining(endtime){
+   let daysCount, hoursCount, minutesCount, secondsCount;
     const timeDifference = Date.parse(endtime) - Date.parse(new Date());
-    const daysCount = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    const hoursCount = Math.floor(timeDifference / (1000 * 60 * 60) % 24);
-    const minutesCount = Math.floor((timeDifference / 1000 / 60) % 60);
-    const secondsCount = Math.floor((timeDifference / 1000) % 60);
+      if(timeDifference <= 0){
+      daysCount=0; 
+      hoursCount=0;
+      minutesCount=0;
+      secondsCount=0;
+      } else{
+       daysCount = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+       hoursCount = Math.floor(timeDifference / (1000 * 60 * 60) % 24);
+       minutesCount = Math.floor((timeDifference / 1000 / 60) % 60);
+       secondsCount = Math.floor((timeDifference / 1000) % 60);
+}
 
     return {timeDifference, daysCount, hoursCount, minutesCount, secondsCount}
   }
