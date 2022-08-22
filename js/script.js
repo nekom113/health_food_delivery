@@ -1,92 +1,133 @@
 window.addEventListener('DOMContentLoaded', () => {
-  const tabs = document.querySelectorAll('.tabheader__item');
-  const tabsContent = document.querySelectorAll('.tabcontent');
-  const tabsParent = document.querySelector('.tabheader__items');
+	const tabs = document.querySelectorAll('.tabheader__item');
+	const tabsContent = document.querySelectorAll('.tabcontent');
+	const tabsParent = document.querySelector('.tabheader__items');
 
-  function hideTabContent() {
-    tabsContent.forEach((el) => {
-      el.classList.add('hide');
-      el.classList.remove('show', 'fade');
-    });
+	function hideTabContent() {
+		tabsContent.forEach((el) => {
+			el.classList.add('hide');
+			el.classList.remove('show', 'fade');
+		});
 
-    tabs.forEach((tab) => {
-      tab.classList.remove('tabheader__item_active');
-    });
-  }
+		tabs.forEach((tab) => {
+			tab.classList.remove('tabheader__item_active');
+		});
+	}
 
-  function showTabContent(i = 0) {
-    tabsContent[i].classList.add('show', 'fade');
-    tabsContent[i].classList.remove('hide');
-    tabs[i].classList.add('tabheader__item_active');
-  }
-  hideTabContent();
-  showTabContent();
+	function showTabContent(i = 0) {
+		tabsContent[i].classList.add('show', 'fade');
+		tabsContent[i].classList.remove('hide');
+		tabs[i].classList.add('tabheader__item_active');
+	}
+	hideTabContent();
+	showTabContent();
 
-  tabsParent.addEventListener('click', (event) => {
-    const { target } = event;
+	tabsParent.addEventListener('click', (event) => {
+		const { target } = event;
 
-    if (target && target.classList.contains('tabheader__item')) {
-      tabs.forEach((item, i) => {
-        if (target === item) {
-          hideTabContent();
-          showTabContent(i);
-        }
-      });
-    }
-  });
-  // Timer
-  const deadline = '2022-08-18'
+		if (target && target.classList.contains('tabheader__item')) {
+			tabs.forEach((item, i) => {
+				if (target === item) {
+					hideTabContent();
+					showTabContent(i);
+				}
+			});
+		}
+	});
+	// Timer
+	const deadline = '2022-08-18'
 
 
-  function getTimeRemaining(endtime){
-   let daysCount, hoursCount, minutesCount, secondsCount;
-    const timeDifference = Date.parse(endtime) - Date.parse(new Date());
-      if(timeDifference <= 0){
-      daysCount=0; 
-      hoursCount=0;
-      minutesCount=0;
-      secondsCount=0;
-      } else{
-       daysCount = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-       hoursCount = Math.floor(timeDifference / (1000 * 60 * 60) % 24);
-       minutesCount = Math.floor((timeDifference / 1000 / 60) % 60);
-       secondsCount = Math.floor((timeDifference / 1000) % 60);
-}
+	function getTimeRemaining(endtime) {
+		let daysCount, hoursCount, minutesCount, secondsCount;
+		const timeDifference = Date.parse(endtime) - Date.parse(new Date());
+		if (timeDifference <= 0) {
+			daysCount = 0;
+			hoursCount = 0;
+			minutesCount = 0;
+			secondsCount = 0;
+		} else {
+			daysCount = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+			hoursCount = Math.floor(timeDifference / (1000 * 60 * 60) % 24);
+			minutesCount = Math.floor((timeDifference / 1000 / 60) % 60);
+			secondsCount = Math.floor((timeDifference / 1000) % 60);
+		}
 
-    return {timeDifference, daysCount, hoursCount, minutesCount, secondsCount}
-  }
+		return { timeDifference, daysCount, hoursCount, minutesCount, secondsCount }
+	}
 
-  function getNumbersWhithZero(number){
-    if(number >=0 && number < 10){
-      return `0${number}`
-    } else{
-      return number
-    }
-  }
+	function getNumbersWhithZero(number) {
+		if (number >= 0 && number < 10) {
+			return `0${number}`
+		} else {
+			return number
+		}
+	}
 
-  function setClock(selector, endtime){
-    const timer = document.querySelector(selector);
-    const days = timer.querySelector('#days');
-    const hours = timer.querySelector('#hours');
-    const minutes = timer.querySelector('#minutes');
-    const seconds = timer.querySelector('#seconds');
+	function setClock(selector, endtime) {
+		const timer = document.querySelector(selector);
+		const days = timer.querySelector('#days');
+		const hours = timer.querySelector('#hours');
+		const minutes = timer.querySelector('#minutes');
+		const seconds = timer.querySelector('#seconds');
 
-    const timeInterval = setInterval(updateClock, 1000)
+		const timeInterval = setInterval(updateClock, 1000)
 
-    updateClock();
+		updateClock();
 
-    function updateClock(){
-      const {timeDifference, daysCount, hoursCount, minutesCount, secondsCount} = getTimeRemaining(endtime)
-      days.innerHTML = getNumbersWhithZero(daysCount);
-      hours.innerHTML = getNumbersWhithZero(hoursCount);
-      minutes.innerHTML = getNumbersWhithZero(minutesCount);
-      seconds.innerHTML = getNumbersWhithZero(secondsCount);
+		function updateClock() {
+			const { timeDifference, daysCount, hoursCount, minutesCount, secondsCount } = getTimeRemaining(endtime)
+			days.innerHTML = getNumbersWhithZero(daysCount);
+			hours.innerHTML = getNumbersWhithZero(hoursCount);
+			minutes.innerHTML = getNumbersWhithZero(minutesCount);
+			seconds.innerHTML = getNumbersWhithZero(secondsCount);
 
-      if(timeDifference <= 0){
-        clearInterval(timeInterval);
-      } 
-    }
-  }
+			if (timeDifference <= 0) {
+				clearInterval(timeInterval);
+			}
+		}
+	}
 
-  setClock('.timer', deadline)
+	setClock('.timer', deadline);
+
+	/* Modal window */
+
+	const modalWindow = document.querySelector('.modal');
+	const buttonModalOpen = document.querySelectorAll('[data-modal]')
+	const buttonModalClose = document.querySelector('[data-close]')
+
+	function openModal() {
+		modalWindow.style.display = 'block';
+		document.body.style.overflow = 'hidden';
+		clearInterval(modalTimerId)
+	}
+	function closeModal() {
+		modalWindow.style.display = 'none';
+		document.body.style.overflow = '';
+	}
+	buttonModalOpen.forEach(ev => {
+		ev.addEventListener('click', openModal);
+	});
+
+	buttonModalClose.addEventListener('click', closeModal);
+
+	modalWindow.addEventListener('click', (e) => {
+		if (e.target === modalWindow) {
+			closeModal()
+		}
+	})
+	document.addEventListener('keydown', (e) => {
+		if (e.code === 'Escape' && modalWindow.style.display === 'block') {
+			closeModal()
+		}
+	})
+	// const modalTimerId = setTimeout(openModal, 6000)
+	function showModalByScroll() {
+		if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+			openModal();
+			window.removeEventListener('scroll', showModalByScroll)
+		}
+
+	}
+	window.addEventListener('scroll', showModalByScroll)
 });
