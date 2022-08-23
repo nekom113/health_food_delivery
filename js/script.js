@@ -35,8 +35,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 	// Timer
-	const deadline = '2022-08-18'
 
+	const deadline = `2022.12.31`
 
 	function getTimeRemaining(endtime) {
 		let daysCount, hoursCount, minutesCount, secondsCount;
@@ -130,4 +130,72 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	}
 	window.addEventListener('scroll', showModalByScroll)
+
+	// Динамичные карточки с меню
+	const menuDB = [{
+		img: 'img/tabs/vegy.jpg',
+		alt: "vegy",
+		subtitle: '"Фитнес"',
+		description: 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и	фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким	качеством!',
+		total: 1229,
+		parent: ".menu .container"
+	},
+	{
+		img: "img/tabs/elite.jpg",
+		alt: "elite",
+		subtitle: '“Премиум”',
+		description: 'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+		total: 1550,
+		parent: ".menu .container"
+	},
+	{
+		img: "img/tabs/post.jpg",
+		alt: "post",
+		subtitle: '"Постное"',
+		description: 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
+		total: 1430,
+		parent: ".menu .container"
+	}]
+
+	class formMenu {
+		constructor(img, alt, subtitle, description, total, parent) {
+			this.img = img;
+			this.alt = alt;
+			this.subtitle = subtitle;
+			this.description = description;
+			this.total = total;
+			this.parent = document.querySelector(parent)
+		}
+		renderForm() {
+			const menuItem = document.createElement("div");
+			menuItem.innerHTML = `
+					<div class="menu__item">
+						<img src=${this.img} alt=${this.alt}>
+						<h3 class="menu__item-subtitle"> Меню ${this.subtitle}</h3>
+						<div class="menu__item-descr">${this.description}</div>
+						<div class="menu__item-divider"></div>
+						<div class="menu__item-price">
+							<div class="menu__item-cost">Цена</div>
+							<div class="menu__item-total"><span>${this.total}</span> руб./день</div>
+						</div>
+					</div>`;
+
+			this.parent.appendChild(menuItem);
+
+		}
+	}
+
+	menuDB.forEach(el => {
+		new formMenu(
+			el.img,
+			el.alt,
+			el.subtitle,
+			el.description,
+			el.total,
+			el.parent
+		).renderForm()
+	})
+
+
 });
+
