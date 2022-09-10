@@ -22,7 +22,23 @@
 			"price": 21
 		}
 	],
-	"requests": [],
+	"requests": [
+		{
+			"name": "ddd",
+			"phone": "d",
+			"id": 1
+		},
+		{
+			"name": "2",
+			"phone": "332",
+			"id": 2
+		},
+		{
+			"name": "Alex",
+			"phone": "9394r-095-038",
+			"id": 3
+		}
+	],
 	"slides": [
 		{
 			"src": "img/slider/pepper.jpg",

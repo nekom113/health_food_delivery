@@ -1,3 +1,4 @@
+
 //Tabs
 
 
@@ -413,3 +414,70 @@ dirs.forEach(dir => {
 	})
 })
 
+// calculator
+const result = document.querySelector('.calculating__result span');
+
+let sex = 'female';
+let ratio = 1.375;
+let weight, height, age;
+
+function calulateCalloies() {
+	if (!sex || !weight || !height || !age || !ratio) {
+		result.textContent = '____';
+		return;
+	}
+
+	if (sex === 'female') {
+		result.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio)
+	} else {
+		result.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio)
+	}
+}
+
+calulateCalloies();
+
+function getStaticData(parentSelector, activeClass) {
+	const elements = document.querySelectorAll(`${parentSelector} div`)
+	elements.forEach(element => {
+		element.addEventListener('click', (el) => {
+			if (el.target.getAttribute('data-ratio')) {
+				ratio = +el.target.getAttribute('data-ratio');
+			} else {
+				sex = el.target.getAttribute('id');
+			}
+
+			elements.forEach(el => {
+				el.classList.remove(activeClass)
+			})
+			el.target.classList.add(activeClass)
+
+			calulateCalloies()
+		})
+	})
+
+}
+getStaticData('#gender', 'calculating__choose-item_active');
+getStaticData('.calculating__choose_big', 'calculating__choose-item_active');
+
+function getDinamicData(selector) {
+	const input = document.querySelector(selector);
+
+	input.addEventListener('input', () => {
+		switch (input.getAttribute('id')) {
+			case 'height':
+				height = +input.value;
+				break;
+			case 'weight':
+				weight = +input.value;
+				break;
+			case 'age':
+				age = +input.value;
+				break
+		}
+		calulateCalloies()
+		console.log(height, weight, age);
+	});
+}
+getDinamicData('#height')
+getDinamicData('#weight')
+getDinamicData('#age')
