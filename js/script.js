@@ -294,6 +294,53 @@ slidesWrapper.style.overflow = 'hidden';
 
 slides.forEach(slide => slide.style.width = width);
 
+slidesWrapper.style.position = 'relative';
+
+const indicators = document.createElement('ol'),
+	dirs = [];
+
+indicators.classList.add('carusel-indicators');
+indicators.style.cssText = `
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		left: 0;	
+		z-index: 15;
+		display: flex;
+		justify-content: center;
+		margin-right: 15%;
+		margin-left: 15%;
+		list-style: none;	
+	`;
+slidesWrapper.append(indicators);
+
+for (let i = 0; i < slides.length; i++) {
+	const dir = document.createElement('li');
+	dir.setAttribute('data-slide-to', i + 1);
+	dir.style.cssText = `
+		box-sizing: content-box;
+		flex: 0 1 auto;
+		width: 10px;
+		height: 10px;
+		margin-right: 3px;
+		margin-left: 3px;
+		cursor: pointer;
+		background-color: #fff;
+		background-clip: padding-box;
+		border-top: 10px solid transparent;
+		border-bottom: 10px solid transparent;
+		border-radius: 100%;
+		opacity: .5;
+		transition: opacity .6s ease
+	`;
+	if (i == 0) {
+		dir.style.opacity = 1;
+	}
+	indicators.append(dir);
+	dirs.push(dir)
+}
+
+
 btnSliderNext.addEventListener('click', () => {
 	if (offset == (+width.slice(0, width.length - 2) * (slides.length - 1))) {
 		offset = 0;
@@ -314,6 +361,11 @@ btnSliderNext.addEventListener('click', () => {
 	} else {
 		currentIndexSlide.textContent = slideIndex;
 	}
+	dirs.forEach(dir => {
+		dir.style.opacity = ".5"
+	})
+	dirs[slideIndex - 1].style.opacity = 1;
+
 });
 
 btnSliderPrev.addEventListener('click', () => {
@@ -334,18 +386,30 @@ btnSliderPrev.addEventListener('click', () => {
 		currentIndexSlide.textContent = `0${slideIndex}`;
 	} else {
 		currentIndexSlide.textContent = slideIndex;
-	}
+	};
+	dirs.forEach(dir => {
+		dir.style.opacity = ".5"
+	})
+	dirs[slideIndex - 1].style.opacity = 1;
+});
+
+dirs.forEach(dir => {
+	dir.addEventListener('click', ev => {
+		const slideTo = ev.target.getAttribute('data-slide-to');
+
+		slideIndex = slideTo;
+		offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+
+		slidesBox.style.transform = `translateX(-${offset}px)`;
+		if (slides.length < 10) {
+			s.textContent = `0${slideIndex}`;
+		} else {
+			currentIndexSlide.textContent = slideIndex;
+		}
+		dirs.forEach(dir => {
+			dir.style.opacity = ".5"
+		})
+		dirs[slideIndex - 1].style.opacity = 1;
+	})
 })
-
-
-
-
-
-
-
-
-
-
-
-
 
