@@ -417,9 +417,37 @@ dirs.forEach(dir => {
 // calculator
 const result = document.querySelector('.calculating__result span');
 
-let sex = 'female';
-let ratio = 1.375;
-let weight, height, age;
+let sex, ratio, weight, height, age;
+
+if (localStorage.getItem('sex')) {
+	sex = localStorage.getItem('sex');
+} else {
+	sex = 'female';
+	sex = localStorage.setItem('sex', 'female');
+}
+
+if (localStorage.getItem('ratio')) {
+	ratio = localStorage.getItem('ratio');
+} else {
+	ratio = 1.375;
+	ratio = localStorage.setItem('ratio', 1.375);
+}
+
+function renderInterface(selector, activeClass, key) {
+	const elements = document.querySelectorAll(`${selector} div`)
+	elements.forEach(el => {
+		el.classList.remove(activeClass)
+		if (el.id === localStorage.getItem('sex')) {
+			el.classList.add(activeClass)
+		}
+		if (el.dataset.ratio === localStorage.getItem('ratio')) {
+			el.classList.add(activeClass)
+		}
+	})
+}
+
+renderInterface('#gender', 'calculating__choose-item_active')
+renderInterface('.calculating__choose_big', 'calculating__choose-item_active')
 
 function calulateCalloies() {
 	if (!sex || !weight || !height || !age || !ratio) {
@@ -442,8 +470,11 @@ function getStaticData(parentSelector, activeClass) {
 		element.addEventListener('click', (el) => {
 			if (el.target.getAttribute('data-ratio')) {
 				ratio = +el.target.getAttribute('data-ratio');
+				localStorage.setItem('ratio', +el.target.getAttribute('data-ratio'))
 			} else {
 				sex = el.target.getAttribute('id');
+				localStorage.setItem('sex', el.target.getAttribute('id'))
+
 			}
 
 			elements.forEach(el => {
@@ -462,7 +493,15 @@ getStaticData('.calculating__choose_big', 'calculating__choose-item_active');
 function getDinamicData(selector) {
 	const input = document.querySelector(selector);
 
+
 	input.addEventListener('input', () => {
+
+		if (input.value.match(/\D/g)) {
+			input.style.border = '2px solid red'
+		} else {
+			input.style.border = 'none'
+		}
+
 		switch (input.getAttribute('id')) {
 			case 'height':
 				height = +input.value;
@@ -475,7 +514,6 @@ function getDinamicData(selector) {
 				break
 		}
 		calulateCalloies()
-		console.log(height, weight, age);
 	});
 }
 getDinamicData('#height')
