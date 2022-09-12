@@ -1,4 +1,5 @@
-export default function switchSlides() {
+export default function getSlider() {
+
 	const slides = document.querySelectorAll('.offer__slide')
 	const slidesWrapper = document.querySelector('.offer__slider-wrapper')
 	const slidesBox = document.querySelector('.offer__slider-inner')
@@ -145,6 +146,4 @@ export default function switchSlides() {
 			dirs[slideIndex - 1].style.opacity = 1;
 		})
 	})
-
-
 }
