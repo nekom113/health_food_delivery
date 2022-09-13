@@ -293,25 +293,35 @@ function getSlider() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ showModalWindow)
+/* harmony export */   "closeModal": () => (/* binding */ closeModal),
+/* harmony export */   "default": () => (/* binding */ showModalWindow),
+/* harmony export */   "openModal": () => (/* binding */ openModal)
 /* harmony export */ });
-function showModalWindow() {
+function openModal(modalSelector, modalTimerId) {
+	const modalWindow = document.querySelector(modalSelector);
+	modalWindow.style.display = 'block';
+	document.body.style.overflow = 'hidden';
+	if (modalTimerId) {
+		clearInterval(modalTimerId)// выключение автоматически запускаемого модального окна
+	}
+}
+function closeModal(modalSelector) {
+	const modalWindow = document.querySelector(modalSelector);
+	modalWindow.style.display = 'none';
+	document.body.style.overflow = '';
+}
 
-	const modalWindow = document.querySelector('.modal');
-	const buttonModalOpen = document.querySelectorAll('[data-modal]');
+
+function showModalWindow(triggerSelector, modalSelector, modalTimerId) {
+
+	const modalWindow = document.querySelector(modalSelector);
+	const buttonModalOpen = document.querySelectorAll(triggerSelector);
 	const buttonModalClose = document.querySelector('[data-close]');
 
-	function openModal() {
-		modalWindow.style.display = 'block';
-		document.body.style.overflow = 'hidden';
-		// clearInterval(modalTimerId); // выключение автоматически запускаемого модального окна
-	}
-	function closeModal() {
-		modalWindow.style.display = 'none';
-		document.body.style.overflow = '';
-	}
+
 	buttonModalOpen.forEach((ev) => {
-		ev.addEventListener('click', openModal);
+		ev.addEventListener('click', () => openModal(modalSelector, modalTimerId)
+		)
 	});
 
 	buttonModalClose.addEventListener('click', closeModal);
@@ -326,7 +336,7 @@ function showModalWindow() {
 			closeModal();
 		}
 	});
-	// const modalTimerId = setTimeout(openModal, 6000) // автоматический запуск модального окна 
+
 	function showModalByScroll() {
 		if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
 			openModal();
@@ -392,6 +402,8 @@ function showModalWindow() {
 			})
 		})
 }
+
+
 
 
 /***/ }),
@@ -532,6 +544,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ userDataManage)
 /* harmony export */ });
+/* harmony import */ var _showModalWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./showModalWindow */ "./src/js/modules/showModalWindow.js");
+
+
 function userDataManage(){
 	const orderForms = document.querySelectorAll('form');
 const message = {
@@ -583,7 +598,7 @@ const postData = async (url, data) => {
 function showThanksModal(message) {
 	const prevModalWindow = document.querySelector('.modal__dialog');
 	prevModalWindow.classList.add('hide');
-	openModal();
+	(0,_showModalWindow__WEBPACK_IMPORTED_MODULE_0__.openModal)();
 	const thanksModal = document.createElement('div');
 	thanksModal.classList.add('modal__dialog');
 	thanksModal.innerHTML = `
@@ -597,7 +612,7 @@ function showThanksModal(message) {
 		thanksModal.remove();
 		prevModalWindow.classList.add('show');
 		prevModalWindow.classList.remove('hide');
-		closeModal();
+		(0,_showModalWindow__WEBPACK_IMPORTED_MODULE_0__.closeModal)();
 	}, 4000)
 }
 }
@@ -672,7 +687,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_getSlider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/getSlider */ "./src/js/modules/getSlider.js");
 /* harmony import */ var _modules_calculateCallories__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/calculateCallories */ "./src/js/modules/calculateCallories.js");
 /* harmony import */ var _modules_showTimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/showTimer */ "./src/js/modules/showTimer.js");
-/* harmony import */ var _modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/showModalWindow */ "./src/js/modules/showModalWindow.js");
+/* harmony import */ var _modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../js/modules/showModalWindow */ "./src/js/modules/showModalWindow.js");
 /* harmony import */ var _modules_userDataManage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/userDataManage */ "./src/js/modules/userDataManage.js");
 
 
@@ -681,10 +696,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-(0,_modules_showTabs__WEBPACK_IMPORTED_MODULE_0__["default"])('.tabheader__item', '.tabcontent', '.tabheader__items')
+
+let modalTimerId = setTimeout(_modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__.openModal, 6000) // автоматический запуск модального окна 
+;(0,_modules_showTabs__WEBPACK_IMPORTED_MODULE_0__["default"])('.tabheader__item', '.tabcontent', '.tabheader__items')
 ;(0,_modules_getSlider__WEBPACK_IMPORTED_MODULE_1__["default"])()
 ;(0,_modules_showTimer__WEBPACK_IMPORTED_MODULE_3__["default"])()
-;(0,_modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__["default"])()
+;(0,_modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__["default"])('[data-modal]', '.modal', modalTimerId)
 ;(0,_modules_userDataManage__WEBPACK_IMPORTED_MODULE_5__["default"])()
 ;(0,_modules_calculateCallories__WEBPACK_IMPORTED_MODULE_2__["default"])()
 

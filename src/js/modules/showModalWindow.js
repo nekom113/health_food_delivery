@@ -1,20 +1,28 @@
-export default function showModalWindow() {
+function openModal(modalSelector, modalTimerId) {
+	const modalWindow = document.querySelector(modalSelector);
+	modalWindow.style.display = 'block';
+	document.body.style.overflow = 'hidden';
+	if (modalTimerId) {
+		clearInterval(modalTimerId)// выключение автоматически запускаемого модального окна
+	}
+}
+function closeModal(modalSelector) {
+	const modalWindow = document.querySelector(modalSelector);
+	modalWindow.style.display = 'none';
+	document.body.style.overflow = '';
+}
 
-	const modalWindow = document.querySelector('.modal');
-	const buttonModalOpen = document.querySelectorAll('[data-modal]');
+
+export default function showModalWindow(triggerSelector, modalSelector, modalTimerId) {
+
+	const modalWindow = document.querySelector(modalSelector);
+	const buttonModalOpen = document.querySelectorAll(triggerSelector);
 	const buttonModalClose = document.querySelector('[data-close]');
 
-	function openModal() {
-		modalWindow.style.display = 'block';
-		document.body.style.overflow = 'hidden';
-		// clearInterval(modalTimerId); // выключение автоматически запускаемого модального окна
-	}
-	function closeModal() {
-		modalWindow.style.display = 'none';
-		document.body.style.overflow = '';
-	}
+
 	buttonModalOpen.forEach((ev) => {
-		ev.addEventListener('click', openModal);
+		ev.addEventListener('click', () => openModal(modalSelector, modalTimerId)
+		)
 	});
 
 	buttonModalClose.addEventListener('click', closeModal);
@@ -29,7 +37,7 @@ export default function showModalWindow() {
 			closeModal();
 		}
 	});
-	// const modalTimerId = setTimeout(openModal, 6000) // автоматический запуск модального окна 
+
 	function showModalByScroll() {
 		if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
 			openModal();
@@ -95,3 +103,5 @@ export default function showModalWindow() {
 			})
 		})
 }
+
+export { closeModal, openModal }

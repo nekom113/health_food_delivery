@@ -1,3 +1,5 @@
+import { closeModal, openModal} from "./showModalWindow";
+
 export default function userDataManage(){
 	const orderForms = document.querySelectorAll('form');
 const message = {

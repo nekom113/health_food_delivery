@@ -4,10 +4,12 @@ import calulateCalloies from './modules/calculateCallories';
 import showTimer from './modules/showTimer';
 import showModalWindow from './modules/showModalWindow';
 import userDataManage from './modules/userDataManage';
+import { openModal } from '../js/modules/showModalWindow'
 
+let modalTimerId = setTimeout(openModal, 6000) // автоматический запуск модального окна 
 showTabs('.tabheader__item', '.tabcontent', '.tabheader__items')
 getSlider()
 showTimer()
-showModalWindow()
+showModalWindow('[data-modal]', '.modal', modalTimerId)
 userDataManage()
 calulateCalloies()
