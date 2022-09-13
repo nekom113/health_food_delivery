@@ -9,8 +9,6 @@ export default function userDataManage(formSelector, modalTimerId) {
 		failure: 'Что-то пошло не так.'
 	}
 
-
-
 	const getUserDatafromForm = (form) => {
 		form.addEventListener('submit', event => {
 			event.preventDefault()
@@ -28,7 +26,6 @@ export default function userDataManage(formSelector, modalTimerId) {
 
 			postData('http://localhost:3000/requests', json)
 				.then(data => {
-					console.log(data)
 					showThanksModal(message.success);
 					statusMessage.remove();
 				}).catch(() => showThanksModal(message.failure)).finally(() => form.reset())

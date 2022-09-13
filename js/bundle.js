@@ -8,119 +8,121 @@
   \**********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.r(__webpack_exports__);
+				__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ calulateCalloies)
-/* harmony export */ });
-function calulateCalloies() {
-	const result = document.querySelector('.calculating__result span');
+					/* harmony export */
+});
+				function calulateCalloies() {
+					const result = document.querySelector('.calculating__result span');
 
-	let sex, ratio, weight, height, age;
+					let sex, ratio, weight, height, age;
 
-	if (localStorage.getItem('sex')) {
-		sex = localStorage.getItem('sex');
-	} else {
-		sex = 'female';
-		sex = localStorage.setItem('sex', 'female');
-	}
+					if (localStorage.getItem('sex')) {
+						sex = localStorage.getItem('sex');
+					} else {
+						sex = 'female';
+						sex = localStorage.setItem('sex', 'female');
+					}
 
-	if (localStorage.getItem('ratio')) {
-		ratio = localStorage.getItem('ratio');
-	} else {
-		ratio = 1.375;
-		ratio = localStorage.setItem('ratio', 1.375);
-	}
+					if (localStorage.getItem('ratio')) {
+						ratio = localStorage.getItem('ratio');
+					} else {
+						ratio = 1.375;
+						ratio = localStorage.setItem('ratio', 1.375);
+					}
 
-	function renderInterface(selector, activeClass, key) {
-		const elements = document.querySelectorAll(`${selector} div`)
-		elements.forEach(el => {
-			el.classList.remove(activeClass)
-			if (el.id === localStorage.getItem('sex')) {
-				el.classList.add(activeClass)
-			}
-			if (el.dataset.ratio === localStorage.getItem('ratio')) {
-				el.classList.add(activeClass)
-			}
-		})
-	}
+					function renderInterface(selector, activeClass, key) {
+						const elements = document.querySelectorAll(`${selector} div`)
+						elements.forEach(el => {
+							el.classList.remove(activeClass)
+							if (el.id === localStorage.getItem('sex')) {
+								el.classList.add(activeClass)
+							}
+							if (el.dataset.ratio === localStorage.getItem('ratio')) {
+								el.classList.add(activeClass)
+							}
+						})
+					}
 
-	renderInterface('#gender', 'calculating__choose-item_active')
-	renderInterface('.calculating__choose_big', 'calculating__choose-item_active')
+					renderInterface('#gender', 'calculating__choose-item_active')
+					renderInterface('.calculating__choose_big', 'calculating__choose-item_active')
 
-	function calculate() {
-		if (!sex || !weight || !height || !age || !ratio) {
-			result.textContent = '____';
-			return;
-		}
+					function calculate() {
+						if (!sex || !weight || !height || !age || !ratio) {
+							result.textContent = '____';
+							return;
+						}
 
-		if (sex === 'female') {
-			result.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio)
-		} else {
-			result.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio)
-		}
-	}
+						if (sex === 'female') {
+							result.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio)
+						} else {
+							result.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio)
+						}
+					}
 
-	calculate();
+					calculate();
 
-	function getStaticData(parentSelector, activeClass) {
-		const elements = document.querySelectorAll(`${parentSelector} div`)
-		elements.forEach(element => {
-			element.addEventListener('click', (el) => {
-				if (el.target.getAttribute('data-ratio')) {
-					ratio = +el.target.getAttribute('data-ratio');
-					localStorage.setItem('ratio', +el.target.getAttribute('data-ratio'))
-				} else {
-					sex = el.target.getAttribute('id');
-					localStorage.setItem('sex', el.target.getAttribute('id'))
+					function getStaticData(parentSelector, activeClass) {
+						const elements = document.querySelectorAll(`${parentSelector} div`)
+						elements.forEach(element => {
+							element.addEventListener('click', (el) => {
+								if (el.target.getAttribute('data-ratio')) {
+									ratio = +el.target.getAttribute('data-ratio');
+									localStorage.setItem('ratio', +el.target.getAttribute('data-ratio'))
+								} else {
+									sex = el.target.getAttribute('id');
+									localStorage.setItem('sex', el.target.getAttribute('id'))
 
+								}
+
+								elements.forEach(el => {
+									el.classList.remove(activeClass)
+								})
+								el.target.classList.add(activeClass)
+
+								calculate()
+							})
+						})
+
+					}
+					getStaticData('#gender', 'calculating__choose-item_active');
+					getStaticData('.calculating__choose_big', 'calculating__choose-item_active');
+
+					function getDinamicData(selector) {
+						const input = document.querySelector(selector);
+
+
+						input.addEventListener('input', () => {
+
+							if (input.value.match(/\D/g)) {
+								input.style.border = '2px solid red'
+							} else {
+								input.style.border = 'none'
+							}
+
+							switch (input.getAttribute('id')) {
+								case 'height':
+									height = +input.value;
+									break;
+								case 'weight':
+									weight = +input.value;
+									break;
+								case 'age':
+									age = +input.value;
+									break
+							}
+							calculate()
+						});
+					}
+					getDinamicData('#height')
+					getDinamicData('#weight')
+					getDinamicData('#age')
 				}
 
-				elements.forEach(el => {
-					el.classList.remove(activeClass)
-				})
-				el.target.classList.add(activeClass)
 
-				calculate()
-			})
-		})
-
-	}
-	getStaticData('#gender', 'calculating__choose-item_active');
-	getStaticData('.calculating__choose_big', 'calculating__choose-item_active');
-
-	function getDinamicData(selector) {
-		const input = document.querySelector(selector);
-
-
-		input.addEventListener('input', () => {
-
-			if (input.value.match(/\D/g)) {
-				input.style.border = '2px solid red'
-			} else {
-				input.style.border = 'none'
-			}
-
-			switch (input.getAttribute('id')) {
-				case 'height':
-					height = +input.value;
-					break;
-				case 'weight':
-					weight = +input.value;
-					break;
-				case 'age':
-					age = +input.value;
-					break
-			}
-			calculate()
-		});
-	}
-	getDinamicData('#height')
-	getDinamicData('#weight')
-	getDinamicData('#age')
-}
-
-
-/***/ }),
+				/***/
+}),
 
 /***/ "./src/js/modules/cards.js":
 /*!*********************************!*\
@@ -128,39 +130,40 @@ function calulateCalloies() {
   \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.r(__webpack_exports__);
+				__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
+					/* harmony export */
+});
 /* harmony import */ var _serveces_services__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./serveces/services */ "./src/js/modules/serveces/services.js");
 
 
-function cards() {
-	class formMenu {
-		constructor(img, alt, subtitle, description, price, parent, ...classes) {
-			this.img = img;
-			this.alt = alt;
-			this.subtitle = subtitle;
-			this.description = description;
-			this.classes = classes;
-			this.price = price;
-			this.parent = document.querySelector(parent);
-			this.euroRate = 62;
-			this.changeToRub();
-		}
-		changeToRub() {
-			return this.price = this.price * this.euroRate
-		}
+				function cards() {
+					class formMenu {
+						constructor(img, alt, subtitle, description, price, parent, ...classes) {
+							this.img = img;
+							this.alt = alt;
+							this.subtitle = subtitle;
+							this.description = description;
+							this.classes = classes;
+							this.price = price;
+							this.parent = document.querySelector(parent);
+							this.euroRate = 62;
+							this.changeToRub();
+						}
+						changeToRub() {
+							return this.price = this.price * this.euroRate
+						}
 
-		renderForm() {
-			const menuItem = document.createElement('div');
-			if (this.classes.length == 0) {
-				this.classes = 'menu__item';
-				menuItem.classList.add(this.classes);
-			} else {
-				this.classes.forEach((className) => menuItem.classList.add(className));
-			}
-			menuItem.innerHTML = `
+						renderForm() {
+							const menuItem = document.createElement('div');
+							if (this.classes.length == 0) {
+								this.classes = 'menu__item';
+								menuItem.classList.add(this.classes);
+							} else {
+								this.classes.forEach((className) => menuItem.classList.add(className));
+							}
+							menuItem.innerHTML = `
 			<div class="menu__item">
 					<img src=${this.img} alt=${this.alt}>
 					<h3 class="menu__item-subtitle"> Меню ${this.subtitle}</h3>
@@ -172,24 +175,25 @@ function cards() {
 					</div>
 				</div>
 					`;
-			this.parent.append(menuItem);
-		}
-	}
+							this.parent.append(menuItem);
+						}
+					}
 
 
 
-	axios.get('http://localhost:3000/menu')
-		.then(el => {
-			el.data.forEach(({ img, altimg, title, descr, price }) => {
-				new formMenu(img, altimg, title, descr, price, '.menu .container').renderForm();
-			})
-		})
-}
+					axios.get('http://localhost:3000/menu')
+						.then(el => {
+							el.data.forEach(({ img, altimg, title, descr, price }) => {
+								new formMenu(img, altimg, title, descr, price, '.menu .container').renderForm();
+							})
+						})
+				}
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (cards);
 
 
-/***/ }),
+				/***/
+}),
 
 /***/ "./src/js/modules/getSlider.js":
 /*!*************************************!*\
@@ -197,47 +201,48 @@ function cards() {
   \*************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.r(__webpack_exports__);
+				__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ getSlider)
-/* harmony export */ });
-function getSlider() {
+					/* harmony export */
+});
+				function getSlider() {
 
-	const slides = document.querySelectorAll('.offer__slide')
-	const slidesWrapper = document.querySelector('.offer__slider-wrapper')
-	const slidesBox = document.querySelector('.offer__slider-inner')
-	const btnSliderNext = document.querySelector('.offer__slider-next')
-	const btnSliderPrev = document.querySelector('.offer__slider-prev')
-	const currentIndexSlide = document.querySelector('#current')
-	const totalNumberSlides = document.querySelector('#total')
-	const width = window.getComputedStyle(slidesWrapper).width
-	let slideIndex = 1;
-	let offset = 0;
+					const slides = document.querySelectorAll('.offer__slide')
+					const slidesWrapper = document.querySelector('.offer__slider-wrapper')
+					const slidesBox = document.querySelector('.offer__slider-inner')
+					const btnSliderNext = document.querySelector('.offer__slider-next')
+					const btnSliderPrev = document.querySelector('.offer__slider-prev')
+					const currentIndexSlide = document.querySelector('#current')
+					const totalNumberSlides = document.querySelector('#total')
+					const width = window.getComputedStyle(slidesWrapper).width
+					let slideIndex = 1;
+					let offset = 0;
 
-	if (slides.length < 10) {
-		totalNumberSlides.textContent = `0${slides.length}`;
-		currentIndexSlide.textContent = `0${slideIndex}`;
-	} else {
-		totalNumberSlides.textContent = slides.length;
-		currentIndexSlide.textContent = slideIndex
-	}
+					if (slides.length < 10) {
+						totalNumberSlides.textContent = `0${slides.length}`;
+						currentIndexSlide.textContent = `0${slideIndex}`;
+					} else {
+						totalNumberSlides.textContent = slides.length;
+						currentIndexSlide.textContent = slideIndex
+					}
 
 
-	slidesBox.style.width = 100 * slides.length + '%';
-	slidesBox.style.display = 'flex';
-	slidesBox.style.transition = '0.5s all';
+					slidesBox.style.width = 100 * slides.length + '%';
+					slidesBox.style.display = 'flex';
+					slidesBox.style.transition = '0.5s all';
 
-	slidesWrapper.style.overflow = 'hidden';
+					slidesWrapper.style.overflow = 'hidden';
 
-	slides.forEach(slide => slide.style.width = width);
+					slides.forEach(slide => slide.style.width = width);
 
-	slidesWrapper.style.position = 'relative';
+					slidesWrapper.style.position = 'relative';
 
-	const indicators = document.createElement('ol'),
-		dirs = [];
+					const indicators = document.createElement('ol'),
+						dirs = [];
 
-	indicators.classList.add('carusel-indicators');
-	indicators.style.cssText = `
+					indicators.classList.add('carusel-indicators');
+					indicators.style.cssText = `
 		position: absolute;
 		right: 0;
 		bottom: 0;
@@ -249,12 +254,12 @@ function getSlider() {
 		margin-left: 15%;
 		list-style: none;	
 	`;
-	slidesWrapper.append(indicators);
+					slidesWrapper.append(indicators);
 
-	for (let i = 0; i < slides.length; i++) {
-		const dir = document.createElement('li');
-		dir.setAttribute('data-slide-to', i + 1);
-		dir.style.cssText = `
+					for (let i = 0; i < slides.length; i++) {
+						const dir = document.createElement('li');
+						dir.setAttribute('data-slide-to', i + 1);
+						dir.style.cssText = `
 		box-sizing: content-box;
 		flex: 0 1 auto;
 		width: 10px;
@@ -270,89 +275,90 @@ function getSlider() {
 		opacity: .5;
 		transition: opacity .6s ease
 	`;
-		if (i == 0) {
-			dir.style.opacity = 1;
-		}
-		indicators.append(dir);
-		dirs.push(dir)
-	}
+						if (i == 0) {
+							dir.style.opacity = 1;
+						}
+						indicators.append(dir);
+						dirs.push(dir)
+					}
 
 
-	btnSliderNext.addEventListener('click', () => {
-		if (offset == (+width.slice(0, width.length - 2) * (slides.length - 1))) {
-			offset = 0;
-		} else {
-			offset += +width.slice(0, width.length - 2)
-		};
+					btnSliderNext.addEventListener('click', () => {
+						if (offset == (+width.slice(0, width.length - 2) * (slides.length - 1))) {
+							offset = 0;
+						} else {
+							offset += +width.slice(0, width.length - 2)
+						};
 
-		slidesBox.style.transform = `translateX(-${offset}px)`;
+						slidesBox.style.transform = `translateX(-${offset}px)`;
 
-		if (slideIndex == slides.length) {
-			slideIndex = 1;
-		} else {
-			slideIndex++;
-		}
+						if (slideIndex == slides.length) {
+							slideIndex = 1;
+						} else {
+							slideIndex++;
+						}
 
-		if (slides.length < 10) {
-			currentIndexSlide.textContent = `0${slideIndex}`;
-		} else {
-			currentIndexSlide.textContent = slideIndex;
-		}
-		dirs.forEach(dir => {
-			dir.style.opacity = ".5"
-		})
-		dirs[slideIndex - 1].style.opacity = 1;
+						if (slides.length < 10) {
+							currentIndexSlide.textContent = `0${slideIndex}`;
+						} else {
+							currentIndexSlide.textContent = slideIndex;
+						}
+						dirs.forEach(dir => {
+							dir.style.opacity = ".5"
+						})
+						dirs[slideIndex - 1].style.opacity = 1;
 
-	});
+					});
 
-	btnSliderPrev.addEventListener('click', () => {
-		if (offset == 0) {
-			offset = +width.slice(0, width.length - 2) * (slides.length - 1)
-		} else {
-			offset -= +width.slice(0, width.length - 2)
-		}
-		slidesBox.style.transform = `translateX(-${offset}px)`;
+					btnSliderPrev.addEventListener('click', () => {
+						if (offset == 0) {
+							offset = +width.slice(0, width.length - 2) * (slides.length - 1)
+						} else {
+							offset -= +width.slice(0, width.length - 2)
+						}
+						slidesBox.style.transform = `translateX(-${offset}px)`;
 
-		if (slideIndex == 1) {
-			slideIndex = slides.length;
-		} else {
-			slideIndex--;
-		}
+						if (slideIndex == 1) {
+							slideIndex = slides.length;
+						} else {
+							slideIndex--;
+						}
 
-		if (slides.length < 10) {
-			currentIndexSlide.textContent = `0${slideIndex}`;
-		} else {
-			currentIndexSlide.textContent = slideIndex;
-		};
-		dirs.forEach(dir => {
-			dir.style.opacity = ".5"
-		})
-		dirs[slideIndex - 1].style.opacity = 1;
-	});
+						if (slides.length < 10) {
+							currentIndexSlide.textContent = `0${slideIndex}`;
+						} else {
+							currentIndexSlide.textContent = slideIndex;
+						};
+						dirs.forEach(dir => {
+							dir.style.opacity = ".5"
+						})
+						dirs[slideIndex - 1].style.opacity = 1;
+					});
 
-	dirs.forEach(dir => {
-		dir.addEventListener('click', ev => {
-			const slideTo = ev.target.getAttribute('data-slide-to');
+					dirs.forEach(dir => {
+						dir.addEventListener('click', ev => {
+							const slideTo = ev.target.getAttribute('data-slide-to');
 
-			slideIndex = slideTo;
-			offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+							slideIndex = slideTo;
+							offset = +width.slice(0, width.length - 2) * (slideTo - 1);
 
-			slidesBox.style.transform = `translateX(-${offset}px)`;
-			if (slides.length < 10) {
-				s.textContent = `0${slideIndex}`;
-			} else {
-				currentIndexSlide.textContent = slideIndex;
-			}
-			dirs.forEach(dir => {
-				dir.style.opacity = ".5"
-			})
-			dirs[slideIndex - 1].style.opacity = 1;
-		})
-	})
-}
+							slidesBox.style.transform = `translateX(-${offset}px)`;
+							if (slides.length < 10) {
+								s.textContent = `0${slideIndex}`;
+							} else {
+								currentIndexSlide.textContent = slideIndex;
+							}
+							dirs.forEach(dir => {
+								dir.style.opacity = ".5"
+							})
+							dirs[slideIndex - 1].style.opacity = 1;
+						})
+					})
+				}
 
 
-/***/ }),
+				/***/
+}),
 
 /***/ "./src/js/modules/serveces/services.js":
 /*!*********************************************!*\
@@ -360,27 +366,29 @@ function getSlider() {
   \*********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.r(__webpack_exports__);
+				__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "postData": () => (/* binding */ postData)
-/* harmony export */ });
-const postData = async (url, data) => {
-	let res = await fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-type': 'application/json'
-		},
-		body: data
-	});
-	return await res.json()
-}
+					/* harmony export */
+});
+				const postData = async (url, data) => {
+					let res = await fetch(url, {
+						method: 'POST',
+						headers: {
+							'Content-type': 'application/json'
+						},
+						body: data
+					});
+					return await res.json()
+				}
 
 
 
 
 
 
-/***/ }),
+				/***/
+}),
 
 /***/ "./src/js/modules/showModalWindow.js":
 /*!*******************************************!*\
@@ -388,66 +396,68 @@ const postData = async (url, data) => {
   \*******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.r(__webpack_exports__);
+				__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "closeModal": () => (/* binding */ closeModal),
 /* harmony export */   "default": () => (/* binding */ showModalWindow),
 /* harmony export */   "openModal": () => (/* binding */ openModal)
-/* harmony export */ });
+					/* harmony export */
+});
 
-function openModal(modalSelector, modalTimerId) {
-	const modalWindow = document.querySelector(modalSelector);
-	modalWindow.style.display = 'block';
-	document.body.style.overflow = 'hidden';
-	if (modalTimerId) {
-		clearInterval(modalTimerId)
-	}
-}
-function closeModal(modalSelector) {
-	const modalWindow = document.querySelector(modalSelector);
-	modalWindow.style.display = 'none';
-	document.body.style.overflow = '';
-}
-
-
-function showModalWindow(triggerSelector, modalSelector, modalTimerId) {
-
-	const modalWindow = document.querySelector(modalSelector);
-	const buttonModalOpen = document.querySelectorAll(triggerSelector);
-	const buttonModalClose = document.querySelector('[data-close]');
+				function openModal(modalSelector, modalTimerId) {
+					const modalWindow = document.querySelector(modalSelector);
+					modalWindow.style.display = 'block';
+					document.body.style.overflow = 'hidden';
+					if (modalTimerId) {
+						clearInterval(modalTimerId)
+					}
+				}
+				function closeModal(modalSelector) {
+					const modalWindow = document.querySelector(modalSelector);
+					modalWindow.style.display = 'none';
+					document.body.style.overflow = '';
+				}
 
 
-	buttonModalOpen.forEach((ev) => {
-		ev.addEventListener('click', () => openModal(modalSelector, modalTimerId)
-		)
-	});
+				function showModalWindow(triggerSelector, modalSelector, modalTimerId) {
 
-	buttonModalClose.addEventListener('click', () => closeModal('.modal'));
-
-	modalWindow.addEventListener('click', (e) => {
-		if (e.target === modalWindow) {
-			closeModal('.modal');
-		}
-	});
-	document.addEventListener('keydown', (e) => {
-		if (e.code === 'Escape' && modalWindow.style.display === 'block') {
-			closeModal('.modal');
-		}
-	});
-
-	function showModalByScroll() {
-		if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
-			openModal('.modal', modalTimerId);
-			window.removeEventListener('scroll', showModalByScroll);
-		}
-	}
-	window.addEventListener('scroll', showModalByScroll);
-}
+					const modalWindow = document.querySelector(modalSelector);
+					const buttonModalOpen = document.querySelectorAll(triggerSelector);
+					const buttonModalClose = document.querySelector('[data-close]');
 
 
+					buttonModalOpen.forEach((ev) => {
+						ev.addEventListener('click', () => openModal(modalSelector, modalTimerId)
+						)
+					});
+
+					buttonModalClose.addEventListener('click', () => closeModal('.modal'));
+
+					modalWindow.addEventListener('click', (e) => {
+						if (e.target === modalWindow) {
+							closeModal('.modal');
+						}
+					});
+					document.addEventListener('keydown', (e) => {
+						if (e.code === 'Escape' && modalWindow.style.display === 'block') {
+							closeModal('.modal');
+						}
+					});
+
+					function showModalByScroll() {
+						if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+							openModal('.modal', modalTimerId);
+							window.removeEventListener('scroll', showModalByScroll);
+						}
+					}
+					window.addEventListener('scroll', showModalByScroll);
+				}
 
 
-/***/ }),
+
+
+				/***/
+}),
 
 /***/ "./src/js/modules/showTabs.js":
 /*!************************************!*\
@@ -455,52 +465,54 @@ function showModalWindow(triggerSelector, modalSelector, modalTimerId) {
   \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.r(__webpack_exports__);
+				__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ showTabs)
-/* harmony export */ });
-function showTabs(tabsHeader, content, parent, activeClass) {
+					/* harmony export */
+});
+				function showTabs(tabsHeader, content, parent, activeClass) {
 
-	const tabs = document.querySelectorAll(tabsHeader);
-	const tabsContent = document.querySelectorAll(content);
-	const tabsParent = document.querySelector(parent);
+					const tabs = document.querySelectorAll(tabsHeader);
+					const tabsContent = document.querySelectorAll(content);
+					const tabsParent = document.querySelector(parent);
 
-	function hideTabContent() {
+					function hideTabContent() {
 
-		tabsContent.forEach((el) => {
-			el.classList.add('hide');
-			el.classList.remove('show', 'fade');
-		});
+						tabsContent.forEach((el) => {
+							el.classList.add('hide');
+							el.classList.remove('show', 'fade');
+						});
 
-		tabs.forEach(tab => {
-			tab.classList.remove(activeClass);
-		});
-	}
+						tabs.forEach(tab => {
+							tab.classList.remove(activeClass);
+						});
+					}
 
-	function showTabContent(i = 0) {
-		tabsContent[i].classList.add('show', 'fade');
-		tabsContent[i].classList.remove('hide');
-		tabs[i].classList.add(activeClass);
-	}
+					function showTabContent(i = 0) {
+						tabsContent[i].classList.add('show', 'fade');
+						tabsContent[i].classList.remove('hide');
+						tabs[i].classList.add(activeClass);
+					}
 
-	hideTabContent();
-	showTabContent();
-
-	tabsParent.addEventListener('click', event => {
-		const { target } = event;
-		if (target && target.classList.contains('tabheader__item')) {
-			tabs.forEach((item, i) => {
-				if (target == item) {
 					hideTabContent();
-					showTabContent(i);
+					showTabContent();
+
+					tabsParent.addEventListener('click', event => {
+						const { target } = event;
+						if (target && target.classList.contains('tabheader__item')) {
+							tabs.forEach((item, i) => {
+								if (target == item) {
+									hideTabContent();
+									showTabContent(i);
+								}
+							});
+						}
+					});
 				}
-			});
-		}
-	});
-}
 
 
-/***/ }),
+				/***/
+}),
 
 /***/ "./src/js/modules/showTimer.js":
 /*!*************************************!*\
@@ -508,71 +520,73 @@ function showTabs(tabsHeader, content, parent, activeClass) {
   \*************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.r(__webpack_exports__);
+				__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ showTimer)
-/* harmony export */ });
-function showTimer(id, deadline) {
+					/* harmony export */
+});
+				function showTimer(id, deadline) {
 
 
-	function getTimeRemaining(endtime) {
-		let daysCount, hoursCount, minutesCount, secondsCount;
-		const timeDifference = Date.parse(endtime) - Date.parse(new Date());
-		if (timeDifference <= 0) {
-			daysCount = 0;
-			hoursCount = 0;
-			minutesCount = 0;
-			secondsCount = 0;
-		} else {
-			daysCount = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-			hoursCount = Math.floor(timeDifference / (1000 * 60 * 60) % 24);
-			minutesCount = Math.floor((timeDifference / 1000 / 60) % 60);
-			secondsCount = Math.floor((timeDifference / 1000) % 60);
-		}
+					function getTimeRemaining(endtime) {
+						let daysCount, hoursCount, minutesCount, secondsCount;
+						const timeDifference = Date.parse(endtime) - Date.parse(new Date());
+						if (timeDifference <= 0) {
+							daysCount = 0;
+							hoursCount = 0;
+							minutesCount = 0;
+							secondsCount = 0;
+						} else {
+							daysCount = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+							hoursCount = Math.floor(timeDifference / (1000 * 60 * 60) % 24);
+							minutesCount = Math.floor((timeDifference / 1000 / 60) % 60);
+							secondsCount = Math.floor((timeDifference / 1000) % 60);
+						}
 
-		return {
-			timeDifference, daysCount, hoursCount, minutesCount, secondsCount,
-		};
-	}
+						return {
+							timeDifference, daysCount, hoursCount, minutesCount, secondsCount,
+						};
+					}
 
-	function getNumbersWhithZero(number) {
-		if (number >= 0 && number < 10) {
-			return `0${number}`;
-		}
-		return number;
-	}
+					function getNumbersWhithZero(number) {
+						if (number >= 0 && number < 10) {
+							return `0${number}`;
+						}
+						return number;
+					}
 
-	function setClock(selector, endtime) {
-		const timer = document.querySelector(selector);
-		const days = timer.querySelector('#days');
-		const hours = timer.querySelector('#hours');
-		const minutes = timer.querySelector('#minutes');
-		const seconds = timer.querySelector('#seconds');
+					function setClock(selector, endtime) {
+						const timer = document.querySelector(selector);
+						const days = timer.querySelector('#days');
+						const hours = timer.querySelector('#hours');
+						const minutes = timer.querySelector('#minutes');
+						const seconds = timer.querySelector('#seconds');
 
-		const timeInterval = setInterval(updateClock, 1000);
+						const timeInterval = setInterval(updateClock, 1000);
 
-		updateClock();
+						updateClock();
 
-		function updateClock() {
-			const {
-				timeDifference, daysCount, hoursCount, minutesCount, secondsCount,
-			} = getTimeRemaining(endtime);
-			days.innerHTML = getNumbersWhithZero(daysCount);
-			hours.innerHTML = getNumbersWhithZero(hoursCount);
-			minutes.innerHTML = getNumbersWhithZero(minutesCount);
-			seconds.innerHTML = getNumbersWhithZero(secondsCount);
+						function updateClock() {
+							const {
+								timeDifference, daysCount, hoursCount, minutesCount, secondsCount,
+							} = getTimeRemaining(endtime);
+							days.innerHTML = getNumbersWhithZero(daysCount);
+							hours.innerHTML = getNumbersWhithZero(hoursCount);
+							minutes.innerHTML = getNumbersWhithZero(minutesCount);
+							seconds.innerHTML = getNumbersWhithZero(secondsCount);
 
-			if (timeDifference <= 0) {
-				clearInterval(timeInterval);
-			}
-		}
-	}
+							if (timeDifference <= 0) {
+								clearInterval(timeInterval);
+							}
+						}
+					}
 
-	setClock(id, deadline);
-} 
+					setClock(id, deadline);
+				}
 
 
-/***/ }),
+				/***/
+}),
 
 /***/ "./src/js/modules/userDataManage.js":
 /*!******************************************!*\
@@ -580,142 +594,153 @@ function showTimer(id, deadline) {
   \******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.r(__webpack_exports__);
+				__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ userDataManage)
-/* harmony export */ });
+					/* harmony export */
+});
 /* harmony import */ var _showModalWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./showModalWindow */ "./src/js/modules/showModalWindow.js");
 /* harmony import */ var _serveces_services__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./serveces/services */ "./src/js/modules/serveces/services.js");
 
 
 
-function userDataManage(formSelector, modalTimerId) {
-	const orderForms = document.querySelectorAll(formSelector);
-	const message = {
-		loading: 'img/form/spinner.svg',
-		success: 'Спасибо! Скоро мы с вами свяжемся',
-		failure: 'Что-то пошло не так.'
-	}
+				function userDataManage(formSelector, modalTimerId) {
+					const orderForms = document.querySelectorAll(formSelector);
+					const message = {
+						loading: 'img/form/spinner.svg',
+						success: 'Спасибо! Скоро мы с вами свяжемся',
+						failure: 'Что-то пошло не так.'
+					}
 
+					const getUserDatafromForm = (form) => {
+						form.addEventListener('submit', event => {
+							event.preventDefault()
 
-
-	const getUserDatafromForm = (form) => {
-		form.addEventListener('submit', event => {
-			event.preventDefault()
-
-			let statusMessage = document.createElement('img');
-			statusMessage.src = message.loading;
-			statusMessage.style.cssText = `
+							let statusMessage = document.createElement('img');
+							statusMessage.src = message.loading;
+							statusMessage.style.cssText = `
 				display: block;
 				margin: 0 auto
 				`;
-			form.insertAdjacentElement('afterEnd', statusMessage)
-			const formData = new FormData(form)
+							form.insertAdjacentElement('afterEnd', statusMessage)
+							const formData = new FormData(form)
 
-			const json = JSON.stringify(Object.fromEntries(formData.entries()))
+							const json = JSON.stringify(Object.fromEntries(formData.entries()))
 
-			;(0,_serveces_services__WEBPACK_IMPORTED_MODULE_1__.postData)('http://localhost:3000/requests', json)
-				.then(data => {
-					console.log(data)
-					showThanksModal(message.success);
-					statusMessage.remove();
-				}).catch(() => showThanksModal(message.failure)).finally(() => form.reset())
-		})
-	}
+								; (0, _serveces_services__WEBPACK_IMPORTED_MODULE_1__.postData)('http://localhost:3000/requests', json)
+									.then(data => {
+										showThanksModal(message.success);
+										statusMessage.remove();
+									}).catch(() => showThanksModal(message.failure)).finally(() => form.reset())
+						})
+					}
 
-	orderForms.forEach(ev => getUserDatafromForm(ev))
-
+					orderForms.forEach(ev => getUserDatafromForm(ev))
 
 
 
-	function showThanksModal(message) {
-		const prevModalWindow = document.querySelector('.modal__dialog');
-		prevModalWindow.classList.add('hide');
-		(0,_showModalWindow__WEBPACK_IMPORTED_MODULE_0__.openModal)('.modal', modalTimerId);
-		const thanksModal = document.createElement('div');
-		thanksModal.classList.add('modal__dialog');
-		thanksModal.innerHTML = `
+
+					function showThanksModal(message) {
+						const prevModalWindow = document.querySelector('.modal__dialog');
+						prevModalWindow.classList.add('hide');
+						(0, _showModalWindow__WEBPACK_IMPORTED_MODULE_0__.openModal)('.modal', modalTimerId);
+						const thanksModal = document.createElement('div');
+						thanksModal.classList.add('modal__dialog');
+						thanksModal.innerHTML = `
 		<div class="modal__content">
 			<div class="modal__close" data-close>×</div>
 			<div class="modal__title">${message}</div>
 	</div>
 	`;
-		document.querySelector('.modal').append(thanksModal);
-		setTimeout(() => {
-			thanksModal.remove();
-			prevModalWindow.classList.add('show');
-			prevModalWindow.classList.remove('hide');
-			(0,_showModalWindow__WEBPACK_IMPORTED_MODULE_0__.closeModal)();
-		}, 4000)
-	}
-}
+						document.querySelector('.modal').append(thanksModal);
+						setTimeout(() => {
+							thanksModal.remove();
+							prevModalWindow.classList.add('show');
+							prevModalWindow.classList.remove('hide');
+							(0, _showModalWindow__WEBPACK_IMPORTED_MODULE_0__.closeModal)();
+						}, 4000)
+					}
+				}
 
 
-/***/ })
+				/***/
+})
 
-/******/ 	});
+		/******/
+});
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
 /******/ 		var cachedModule = __webpack_module_cache__[moduleId];
 /******/ 		if (cachedModule !== undefined) {
 /******/ 			return cachedModule.exports;
-/******/ 		}
+			/******/
+}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
 /******/ 			// no module.id needed
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
-/******/ 		};
-/******/ 	
+			/******/
+};
+/******/
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
-/******/ 	}
-/******/ 	
+		/******/
+}
+/******/
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
 /******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 			for (var key in definition) {
+/******/ 				if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
+					/******/
+}
+				/******/
+}
+			/******/
+};
+		/******/
+})();
+/******/
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
+		/******/
+})();
+/******/
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
 /******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
+				/******/
+}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
-/*!*************************!*\
-  !*** ./src/js/index.js ***!
-  \*************************/
-__webpack_require__.r(__webpack_exports__);
+			/******/
+};
+		/******/
+})();
+	/******/
+	/************************************************************************/
+	var __webpack_exports__ = {};
+	// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+	(() => {
+		/*!*************************!*\
+			!*** ./src/js/index.js ***!
+			\*************************/
+		__webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_showTabs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/showTabs */ "./src/js/modules/showTabs.js");
 /* harmony import */ var _modules_getSlider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/getSlider */ "./src/js/modules/getSlider.js");
 /* harmony import */ var _modules_calculateCallories__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/calculateCallories */ "./src/js/modules/calculateCallories.js");
@@ -732,28 +757,29 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-let modalTimerId = setTimeout(() => (0,_modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__.openModal)('.modal', modalTimerId), 50000) // автоматический запуск модального окна 
-;(0,_modules_showTabs__WEBPACK_IMPORTED_MODULE_0__["default"])('.tabheader__item', '.tabcontent', '.tabheader__items', 'tabheader__item_active');
-(0,_modules_showTimer__WEBPACK_IMPORTED_MODULE_3__["default"])('.timer', '2022.12.20');
-(0,_modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__["default"])('[data-modal]', '.modal', modalTimerId);
-(0,_modules_userDataManage__WEBPACK_IMPORTED_MODULE_5__["default"])('form', modalTimerId);
-(0,_modules_cards__WEBPACK_IMPORTED_MODULE_6__["default"])();
-(0,_modules_calculateCallories__WEBPACK_IMPORTED_MODULE_2__["default"])();
-(0,_modules_getSlider__WEBPACK_IMPORTED_MODULE_1__["default"])({
-	container: '.offer__slider',
-	wrapper: '.offer__slider-wrapper',
-	slide: '.offer__slide',
-	nextSlide: '.offer__slider-next',
-	prevSlide: '.offer__slider-prev',
-	totalumbersSlides: '#total',
-	currentSlide: '#current',
-	field: '.offer__slider-inner'
-})
+		let modalTimerId = setTimeout(() => (0, _modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__.openModal)('.modal', modalTimerId), 50000) // автоматический запуск модального окна 
+			; (0, _modules_showTabs__WEBPACK_IMPORTED_MODULE_0__["default"])('.tabheader__item', '.tabcontent', '.tabheader__items', 'tabheader__item_active');
+		(0, _modules_showTimer__WEBPACK_IMPORTED_MODULE_3__["default"])('.timer', '2022.12.20');
+		(0, _modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__["default"])('[data-modal]', '.modal', modalTimerId);
+		(0, _modules_userDataManage__WEBPACK_IMPORTED_MODULE_5__["default"])('form', modalTimerId);
+		(0, _modules_cards__WEBPACK_IMPORTED_MODULE_6__["default"])();
+		(0, _modules_calculateCallories__WEBPACK_IMPORTED_MODULE_2__["default"])();
+		(0, _modules_getSlider__WEBPACK_IMPORTED_MODULE_1__["default"])({
+			container: '.offer__slider',
+			wrapper: '.offer__slider-wrapper',
+			slide: '.offer__slide',
+			nextSlide: '.offer__slider-next',
+			prevSlide: '.offer__slider-prev',
+			totalumbersSlides: '#total',
+			currentSlide: '#current',
+			field: '.offer__slider-inner'
+		})
 
-;(0,_modules_getSlider__WEBPACK_IMPORTED_MODULE_1__["default"])();
+			; (0, _modules_getSlider__WEBPACK_IMPORTED_MODULE_1__["default"])();
 
-})();
+	})();
 
-/******/ })()
-;
+	/******/
+})()
+	;
 //# sourceMappingURL=bundle.js.map
