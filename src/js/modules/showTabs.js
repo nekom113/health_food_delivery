@@ -1,4 +1,4 @@
-export default function showTabs(tabsHeader, content, parent) {
+export default function showTabs(tabsHeader, content, parent, activeClass) {
 
 	const tabs = document.querySelectorAll(tabsHeader);
 	const tabsContent = document.querySelectorAll(content);
@@ -12,14 +12,14 @@ export default function showTabs(tabsHeader, content, parent) {
 		});
 
 		tabs.forEach(tab => {
-			tab.classList.remove('tabheader__item_active');
+			tab.classList.remove(activeClass);
 		});
 	}
 
 	function showTabContent(i = 0) {
 		tabsContent[i].classList.add('show', 'fade');
 		tabsContent[i].classList.remove('hide');
-		tabs[i].classList.add('tabheader__item_active');
+		tabs[i].classList.add(activeClass);
 	}
 
 	hideTabContent();

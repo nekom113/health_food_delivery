@@ -47,6 +47,11 @@
       "name": "dd",
       "phone": "ddd",
       "id": 5
+    },
+    {
+      "name": "Alex",
+      "phone": "d",
+      "id": 6
     }
   ],
   "slides": [

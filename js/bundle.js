@@ -122,6 +122,75 @@ function calulateCalloies() {
 
 /***/ }),
 
+/***/ "./src/js/modules/cards.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/cards.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _serveces_services__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./serveces/services */ "./src/js/modules/serveces/services.js");
+
+
+function cards() {
+	class formMenu {
+		constructor(img, alt, subtitle, description, price, parent, ...classes) {
+			this.img = img;
+			this.alt = alt;
+			this.subtitle = subtitle;
+			this.description = description;
+			this.classes = classes;
+			this.price = price;
+			this.parent = document.querySelector(parent);
+			this.euroRate = 62;
+			this.changeToRub();
+		}
+		changeToRub() {
+			return this.price = this.price * this.euroRate
+		}
+
+		renderForm() {
+			const menuItem = document.createElement('div');
+			if (this.classes.length == 0) {
+				this.classes = 'menu__item';
+				menuItem.classList.add(this.classes);
+			} else {
+				this.classes.forEach((className) => menuItem.classList.add(className));
+			}
+			menuItem.innerHTML = `
+			<div class="menu__item">
+					<img src=${this.img} alt=${this.alt}>
+					<h3 class="menu__item-subtitle"> Меню ${this.subtitle}</h3>
+					<div class="menu__item-descr">${this.description}</div>
+					<div class="menu__item-divider"></div>
+					<div class="menu__item-price">
+						<div class="menu__item-cost">Цена</div>
+						<div class="menu__item-total"><span>${this.price}</span> руб./день</div>
+					</div>
+				</div>
+					`;
+			this.parent.append(menuItem);
+		}
+	}
+
+
+
+	axios.get('http://localhost:3000/menu')
+		.then(el => {
+			el.data.forEach(({ img, altimg, title, descr, price }) => {
+				new formMenu(img, altimg, title, descr, price, '.menu .container').renderForm();
+			})
+		})
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (cards);
+
+
+/***/ }),
+
 /***/ "./src/js/modules/getSlider.js":
 /*!*************************************!*\
   !*** ./src/js/modules/getSlider.js ***!
@@ -285,6 +354,34 @@ function getSlider() {
 
 /***/ }),
 
+/***/ "./src/js/modules/serveces/services.js":
+/*!*********************************************!*\
+  !*** ./src/js/modules/serveces/services.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "postData": () => (/* binding */ postData)
+/* harmony export */ });
+const postData = async (url, data) => {
+	let res = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-type': 'application/json'
+		},
+		body: data
+	});
+	return await res.json()
+}
+
+
+
+
+
+
+/***/ }),
+
 /***/ "./src/js/modules/showModalWindow.js":
 /*!*******************************************!*\
   !*** ./src/js/modules/showModalWindow.js ***!
@@ -297,12 +394,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ showModalWindow),
 /* harmony export */   "openModal": () => (/* binding */ openModal)
 /* harmony export */ });
+
 function openModal(modalSelector, modalTimerId) {
 	const modalWindow = document.querySelector(modalSelector);
 	modalWindow.style.display = 'block';
 	document.body.style.overflow = 'hidden';
 	if (modalTimerId) {
-		clearInterval(modalTimerId)// выключение автоматически запускаемого модального окна
+		clearInterval(modalTimerId)
 	}
 }
 function closeModal(modalSelector) {
@@ -324,83 +422,26 @@ function showModalWindow(triggerSelector, modalSelector, modalTimerId) {
 		)
 	});
 
-	buttonModalClose.addEventListener('click', closeModal);
+	buttonModalClose.addEventListener('click', () => closeModal('.modal'));
 
 	modalWindow.addEventListener('click', (e) => {
 		if (e.target === modalWindow) {
-			closeModal();
+			closeModal('.modal');
 		}
 	});
 	document.addEventListener('keydown', (e) => {
 		if (e.code === 'Escape' && modalWindow.style.display === 'block') {
-			closeModal();
+			closeModal('.modal');
 		}
 	});
 
 	function showModalByScroll() {
 		if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
-			openModal();
+			openModal('.modal', modalTimerId);
 			window.removeEventListener('scroll', showModalByScroll);
 		}
 	}
 	window.addEventListener('scroll', showModalByScroll);
-
-	class formMenu {
-		constructor(img, alt, subtitle, description, price, parent, ...classes) {
-			this.img = img;
-			this.alt = alt;
-			this.subtitle = subtitle;
-			this.description = description;
-			this.classes = classes;
-			this.price = price;
-			this.parent = document.querySelector(parent);
-			this.euroRate = 62;
-			this.changeToRub();
-		}
-		changeToRub() {
-			return this.price = this.price * this.euroRate
-		}
-
-		renderForm() {
-			const menuItem = document.createElement('div');
-			if (this.classes.length == 0) {
-				this.classes = 'menu__item';
-				menuItem.classList.add(this.classes);
-			} else {
-				this.classes.forEach((className) => menuItem.classList.add(className));
-			}
-			menuItem.innerHTML = `
-			<div class="menu__item">
-					<img src=${this.img} alt=${this.alt}>
-					<h3 class="menu__item-subtitle"> Меню ${this.subtitle}</h3>
-					<div class="menu__item-descr">${this.description}</div>
-					<div class="menu__item-divider"></div>
-					<div class="menu__item-price">
-						<div class="menu__item-cost">Цена</div>
-						<div class="menu__item-total"><span>${this.price}</span> руб./день</div>
-					</div>
-				</div>
-					`;
-			this.parent.append(menuItem);
-		}
-	}
-
-
-	const getResource = async (url) => {
-		const res = await fetch(url);
-		if (!res.ok) {
-			throw new Error(`Не можем зафетчить ${url}, status ${res.status}`)
-		}
-		return await res.json();
-	};
-
-
-	axios.get('http://localhost:3000/menu')
-		.then(el => {
-			el.data.forEach(({ img, altimg, title, descr, price }) => {
-				new formMenu(img, altimg, title, descr, price, '.menu .container').renderForm();
-			})
-		})
 }
 
 
@@ -418,7 +459,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ showTabs)
 /* harmony export */ });
-function showTabs(tabsHeader, content, parent) {
+function showTabs(tabsHeader, content, parent, activeClass) {
 
 	const tabs = document.querySelectorAll(tabsHeader);
 	const tabsContent = document.querySelectorAll(content);
@@ -432,14 +473,14 @@ function showTabs(tabsHeader, content, parent) {
 		});
 
 		tabs.forEach(tab => {
-			tab.classList.remove('tabheader__item_active');
+			tab.classList.remove(activeClass);
 		});
 	}
 
 	function showTabContent(i = 0) {
 		tabsContent[i].classList.add('show', 'fade');
 		tabsContent[i].classList.remove('hide');
-		tabs[i].classList.add('tabheader__item_active');
+		tabs[i].classList.add(activeClass);
 	}
 
 	hideTabContent();
@@ -471,9 +512,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ showTimer)
 /* harmony export */ });
-function showTimer() {
-	
-	const deadline = '2022.12.20';
+function showTimer(id, deadline) {
+
 
 	function getTimeRemaining(endtime) {
 		let daysCount, hoursCount, minutesCount, secondsCount;
@@ -528,7 +568,7 @@ function showTimer() {
 		}
 	}
 
-	setClock('.timer', deadline);
+	setClock(id, deadline);
 } 
 
 
@@ -545,76 +585,69 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ userDataManage)
 /* harmony export */ });
 /* harmony import */ var _showModalWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./showModalWindow */ "./src/js/modules/showModalWindow.js");
-
-
-function userDataManage(){
-	const orderForms = document.querySelectorAll('form');
-const message = {
-	loading: 'img/form/spinner.svg',
-	success: 'Спасибо! Скоро мы с вами свяжемся',
-	failure: 'Что-то пошло не так.'
-}
+/* harmony import */ var _serveces_services__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./serveces/services */ "./src/js/modules/serveces/services.js");
 
 
 
-const getUserDatafromForm = (form) => {
-	form.addEventListener('submit', event => {
-		event.preventDefault()
+function userDataManage(formSelector, modalTimerId) {
+	const orderForms = document.querySelectorAll(formSelector);
+	const message = {
+		loading: 'img/form/spinner.svg',
+		success: 'Спасибо! Скоро мы с вами свяжемся',
+		failure: 'Что-то пошло не так.'
+	}
 
-		let statusMessage = document.createElement('img');
-		statusMessage.src = message.loading;
-		statusMessage.style.cssText = `
+
+
+	const getUserDatafromForm = (form) => {
+		form.addEventListener('submit', event => {
+			event.preventDefault()
+
+			let statusMessage = document.createElement('img');
+			statusMessage.src = message.loading;
+			statusMessage.style.cssText = `
 				display: block;
 				margin: 0 auto
 				`;
-		form.insertAdjacentElement('afterEnd', statusMessage)
-		const formData = new FormData(form)
+			form.insertAdjacentElement('afterEnd', statusMessage)
+			const formData = new FormData(form)
 
-		const json = JSON.stringify(Object.fromEntries(formData.entries()))
+			const json = JSON.stringify(Object.fromEntries(formData.entries()))
 
-		postData('http://localhost:3000/requests', json)
-			.then(data => {
-				console.log(data)
-				showThanksModal(message.success);
-				statusMessage.remove();
-			}).catch(() => showThanksModal(message.failure)).finally(() => form.reset())
-	})
-}
+			;(0,_serveces_services__WEBPACK_IMPORTED_MODULE_1__.postData)('http://localhost:3000/requests', json)
+				.then(data => {
+					console.log(data)
+					showThanksModal(message.success);
+					statusMessage.remove();
+				}).catch(() => showThanksModal(message.failure)).finally(() => form.reset())
+		})
+	}
 
-orderForms.forEach(ev => getUserDatafromForm(ev))
+	orderForms.forEach(ev => getUserDatafromForm(ev))
 
 
-const postData = async (url, data) => {
-	let res = await fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-type': 'application/json'
-		},
-		body: data
-	});
-	return await res.json()
-}
 
-function showThanksModal(message) {
-	const prevModalWindow = document.querySelector('.modal__dialog');
-	prevModalWindow.classList.add('hide');
-	(0,_showModalWindow__WEBPACK_IMPORTED_MODULE_0__.openModal)();
-	const thanksModal = document.createElement('div');
-	thanksModal.classList.add('modal__dialog');
-	thanksModal.innerHTML = `
+
+	function showThanksModal(message) {
+		const prevModalWindow = document.querySelector('.modal__dialog');
+		prevModalWindow.classList.add('hide');
+		(0,_showModalWindow__WEBPACK_IMPORTED_MODULE_0__.openModal)('.modal', modalTimerId);
+		const thanksModal = document.createElement('div');
+		thanksModal.classList.add('modal__dialog');
+		thanksModal.innerHTML = `
 		<div class="modal__content">
 			<div class="modal__close" data-close>×</div>
 			<div class="modal__title">${message}</div>
 	</div>
 	`;
-	document.querySelector('.modal').append(thanksModal);
-	setTimeout(() => {
-		thanksModal.remove();
-		prevModalWindow.classList.add('show');
-		prevModalWindow.classList.remove('hide');
-		(0,_showModalWindow__WEBPACK_IMPORTED_MODULE_0__.closeModal)();
-	}, 4000)
-}
+		document.querySelector('.modal').append(thanksModal);
+		setTimeout(() => {
+			thanksModal.remove();
+			prevModalWindow.classList.add('show');
+			prevModalWindow.classList.remove('hide');
+			(0,_showModalWindow__WEBPACK_IMPORTED_MODULE_0__.closeModal)();
+		}, 4000)
+	}
 }
 
 
@@ -689,6 +722,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_showTimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/showTimer */ "./src/js/modules/showTimer.js");
 /* harmony import */ var _modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../js/modules/showModalWindow */ "./src/js/modules/showModalWindow.js");
 /* harmony import */ var _modules_userDataManage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/userDataManage */ "./src/js/modules/userDataManage.js");
+/* harmony import */ var _modules_cards__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/cards */ "./src/js/modules/cards.js");
 
 
 
@@ -697,13 +731,26 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-let modalTimerId = setTimeout(_modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__.openModal, 6000) // автоматический запуск модального окна 
-;(0,_modules_showTabs__WEBPACK_IMPORTED_MODULE_0__["default"])('.tabheader__item', '.tabcontent', '.tabheader__items')
-;(0,_modules_getSlider__WEBPACK_IMPORTED_MODULE_1__["default"])()
-;(0,_modules_showTimer__WEBPACK_IMPORTED_MODULE_3__["default"])()
-;(0,_modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__["default"])('[data-modal]', '.modal', modalTimerId)
-;(0,_modules_userDataManage__WEBPACK_IMPORTED_MODULE_5__["default"])()
-;(0,_modules_calculateCallories__WEBPACK_IMPORTED_MODULE_2__["default"])()
+
+let modalTimerId = setTimeout(() => (0,_modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__.openModal)('.modal', modalTimerId), 50000) // автоматический запуск модального окна 
+;(0,_modules_showTabs__WEBPACK_IMPORTED_MODULE_0__["default"])('.tabheader__item', '.tabcontent', '.tabheader__items', 'tabheader__item_active');
+(0,_modules_showTimer__WEBPACK_IMPORTED_MODULE_3__["default"])('.timer', '2022.12.20');
+(0,_modules_showModalWindow__WEBPACK_IMPORTED_MODULE_4__["default"])('[data-modal]', '.modal', modalTimerId);
+(0,_modules_userDataManage__WEBPACK_IMPORTED_MODULE_5__["default"])('form', modalTimerId);
+(0,_modules_cards__WEBPACK_IMPORTED_MODULE_6__["default"])();
+(0,_modules_calculateCallories__WEBPACK_IMPORTED_MODULE_2__["default"])();
+(0,_modules_getSlider__WEBPACK_IMPORTED_MODULE_1__["default"])({
+	container: '.offer__slider',
+	wrapper: '.offer__slider-wrapper',
+	slide: '.offer__slide',
+	nextSlide: '.offer__slider-next',
+	prevSlide: '.offer__slider-prev',
+	totalumbersSlides: '#total',
+	currentSlide: '#current',
+	field: '.offer__slider-inner'
+})
+
+;(0,_modules_getSlider__WEBPACK_IMPORTED_MODULE_1__["default"])();
 
 })();
 

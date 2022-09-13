@@ -1,6 +1,5 @@
-export default function showTimer() {
-	
-	const deadline = '2022.12.20';
+export default function showTimer(id, deadline) {
+
 
 	function getTimeRemaining(endtime) {
 		let daysCount, hoursCount, minutesCount, secondsCount;
@@ -55,5 +54,5 @@ export default function showTimer() {
 		}
 	}
 
-	setClock('.timer', deadline);
+	setClock(id, deadline);
 } 
